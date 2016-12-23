@@ -13,7 +13,7 @@ import com.intellij.openapi.vfs.VirtualFileManager;
 import java.io.IOException;
 
 /**
- * Created by allen on 2016/12/18.
+ * Created by allen on 2016/12/22.
  */
 public class SingletonCode extends AnAction {
 
@@ -38,21 +38,32 @@ public class SingletonCode extends AnAction {
         sd.setVisible(true);
 
     }
+
+
     private GenerateSingletonDialog.Callback callback=new GenerateSingletonDialog.Callback() {
         @Override
         public void showDialogResult(String name, GenerateType type) {
+            // 大小写问题
+            name = captureName(name);
             SingletonCode.this.name=name;
             SingletonCode.this.type=type;
             ApplicationManager.getApplication().runWriteAction(getRunnableWrapper(runnable));
         }
     };
+
+
+    public  String captureName(String name) {
+        name = name.substring(0, 1).toUpperCase() + name.substring(1);
+        return  name;
+    }
+
+
     protected Runnable getRunnableWrapper(final Runnable runnable) {
         return new Runnable() {
             @Override
             public void run() {
                 if(project==null)
                     return ;
-                //支持 undo 操作
                 CommandProcessor.getInstance().executeCommand(project, runnable, " delete "+name+SUFFIX, ActionGroup.EMPTY_GROUP);//cut 是 undo 的描述 我应该填写类名
             }
         };
@@ -68,6 +79,7 @@ public class SingletonCode extends AnAction {
                 VirtualFile writeableFile = folder.createChildData(this, name+SUFFIX);
                 writeableFile.setBinaryContent(type.getBinaryContent(packageName,name));
                 VirtualFileManager.getInstance().syncRefresh();
+                MessageUtils.showMessage("created success! please wait a moment","success");
             } catch (IOException e1) {
                 e1.printStackTrace();
             }

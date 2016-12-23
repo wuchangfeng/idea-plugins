@@ -30,8 +30,8 @@
 
   <actions>
     <!-- Add your actions here -->
-    <action id="SingletonCodeID" class="SingletonCode" text="SingletonCode" description="Generate SingletonCode ">
-      <add-to-group group-id="NewGroup" anchor="after" relative-to-action="NewFile"/>
+    <action id="SingletonCodeID" class="SingletonCode" text="SingletonCode" description="SingletonCode">
+      <add-to-group group-id="NewGroup" anchor="first"/>
       <keyboard-shortcut keymap="$default" first-keystroke="alt Z" second-keystroke="alt X"/>
     </action>
   </actions>

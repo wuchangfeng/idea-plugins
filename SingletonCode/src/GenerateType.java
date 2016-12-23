@@ -3,6 +3,8 @@
  */
 public enum GenerateType {
     LazyUnSafe,LazySafe,Hungry,DoubleCheck,StaticInner,Enum;
+    String creatorInfo;
+    SingletonExplain singletonExplain;
 
     public byte[] getBinaryContent(String packageString,String name) {
         String result = null;
@@ -37,14 +39,17 @@ public enum GenerateType {
         if(result==null||result.isEmpty())
             return null;
         // 返回包名 + 生成的单利代码
-        return (getPackageJoint(packageString)+result).getBytes();
+        return (MessageUtils.getCreaterInfo() + getPackageJoint(packageString) + result).getBytes();
     };
+
+
     private String getPackageJoint(String packageName){
         if(packageName==null||packageName.trim().length()==0)
             return "";
         else
             return "package " +packageName+";\n" + "\n" ;
     };
+
 
     private String lazyUnSafe(String packageName,String className) {
             return 
@@ -62,6 +67,8 @@ public enum GenerateType {
                     "    }\n" +
                     "}";
     }
+
+
     private String lazySafe(String packageName,String className){
         return 
                 "public class "+className+" {\n" +
@@ -78,6 +85,8 @@ public enum GenerateType {
                 "    }\n" +
                 "}";
     }
+
+
     private String staticInner(String packageName,String className){
         return 
                 "public class "+className+" {\n" +
@@ -94,6 +103,8 @@ public enum GenerateType {
                 "    }\n" +
                 "}";
     }
+
+
     private String hungry(String packageName,String className){
         return 
                 "public class "+className+" {\n" +
@@ -107,12 +118,16 @@ public enum GenerateType {
                 "    }\n" +
                 "}";
     }
+
+
     private String enumString(String packageName,String className){
         return 
                 "public enum "+className+" {\n" +
                 "    INSTANCE;\n" +
                 "}";
     }
+
+
     private String doubleCheck(String packageName,String className){
         return 
                 "public class "+className+" {\n" +
@@ -134,5 +149,4 @@ public enum GenerateType {
                 "    }\n" +
                 "}";
     }
-
 }
